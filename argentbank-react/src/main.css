@@ -73,6 +73,44 @@ body {
   width: 200px;
 }
 
+/* Nav connectée : username + 3 icônes Font Awesome dans cercles verts */
+.main-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.main-nav-right--connected .main-nav-username {
+  font-weight: bold;
+  color: #00bc77;
+  margin-right: 0.25rem;
+}
+
+.nav-icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+}
+
+.nav-icon-circle--filled {
+  background-color: #00bc77;
+  color: #fff;
+}
+
+.nav-icon-circle--filled:hover {
+  opacity: 0.9;
+}
+
+.nav-icon-circle--filled i {
+  font-size: 0.95rem;
+}
+
 .hero {
   background-image: url('/img/bank-tree.jpeg');
   background-position: 0 -50px;

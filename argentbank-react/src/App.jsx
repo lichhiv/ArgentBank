@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useSelector } from 'react-redux';
 import './main.css';
 import Header from './components/Header';
+import HeaderConnected from './components/HeaderConnected';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
@@ -14,10 +15,12 @@ function ProtectedRoute({ children }) {
 }
 
 function App() {
+  const token = useSelector((state) => state.auth.token);
+
   return (
     <Router>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <Header />
+        {token ? <HeaderConnected /> : <Header />}
         <div style={{ flex: 1 }}>
           <Routes>
             <Route path="/" element={<Home />} />

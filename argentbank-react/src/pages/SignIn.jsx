@@ -9,7 +9,9 @@ export default function SignIn() {
     const [rememberMe, setRememberMe] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { loading, error } = useSelector((state) => state.auth);
+    const auth = useSelector((state) => state.auth);
+    const loading = auth?.loading ?? false;
+    const error = auth?.error ?? null;
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -1,48 +1,63 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProfile, updateUsername } from '../store/authSlice';
 
 const ACCOUNTS = [
-    {
-        id: 1,
-        title: 'Argent Bank Checking (x8349)',
-        amount: '$2,082.79',
-        description: 'Available Balance'
-    },
-    {
-        id: 2,
-        title: 'Argent Bank Savings (x6712)',
-        amount: '$10,928.42',
-        description: 'Available Balance'
-    },
-    {
-        id: 3,
-        title: 'Argent Bank Credit Card (x8349)',
-        amount: '$184.30',
-        description: 'Current Balance'
-    }
+    { id: 1, title: 'Argent Bank Checking (x8349)', amount: '$2,082.79', description: 'Available Balance' },
+    { id: 2, title: 'Argent Bank Savings (x6712)', amount: '$10,928.42', description: 'Available Balance' },
+    { id: 3, title: 'Argent Bank Credit Card (x8349)', amount: '$184.30', description: 'Current Balance' }
 ];
 
 export default function User() {
-    const [firstName, setFirstName] = useState('Tony');
-    const [lastName, setLastName] = useState('Jarvis');
+    const dispatch = useDispatch();
+    const { user, loading, error } = useSelector((state) => state.auth);
     const [isEditing, setIsEditing] = useState(false);
-    const [editFirstName, setEditFirstName] = useState(firstName);
-    const [editLastName, setEditLastName] = useState(lastName);
+    const [editUserName, setEditUserName] = useState('');
+
+    useEffect(() => {
+        dispatch(fetchProfile());
+    }, [dispatch]);
 
     const handleEditClick = () => {
+        setEditUserName(user?.userName ?? '');
         setIsEditing(true);
     };
 
-    const handleSave = () => {
-        setFirstName(editFirstName);
-        setLastName(editLastName);
-        setIsEditing(false);
+    const handleSave = async () => {
+        if (editUserName.trim()) {
+            try {
+                await dispatch(updateUsername(editUserName.trim())).unwrap();
+                setIsEditing(false);
+            } catch {
+                // erreur déjà dans le store
+            }
+        }
     };
 
     const handleCancel = () => {
-        setEditFirstName(firstName);
-        setEditLastName(lastName);
+        setEditUserName('');
         setIsEditing(false);
     };
+
+    if (loading && !user) {
+        return (
+            <main className="main bg-dark">
+                <div className="header">
+                    <p>Loading...</p>
+                </div>
+            </main>
+        );
+    }
+
+    if (error && !user) {
+        return (
+            <main className="main bg-dark">
+                <div className="header">
+                    <p style={{ color: '#ff6b6b' }}>{error}</p>
+                </div>
+            </main>
+        );
+    }
 
     return (
         <main className="main bg-dark">
@@ -51,32 +66,19 @@ export default function User() {
                     <>
                         <h1>Edit user info</h1>
                         <div className="input-wrapper">
-                            <label htmlFor="firstName">First Name</label>
+                            <label htmlFor="userName">User name</label>
                             <input
                                 type="text"
-                                id="firstName"
-                                value={editFirstName}
-                                onChange={(e) => setEditFirstName(e.target.value)}
-                            />
-                        </div>
-                        <div className="input-wrapper">
-                            <label htmlFor="lastName">Last Name</label>
-                            <input
-                                type="text"
-                                id="lastName"
-                                value={editLastName}
-                                onChange={(e) => setEditLastName(e.target.value)}
+                                id="userName"
+                                value={editUserName}
+                                onChange={(e) => setEditUserName(e.target.value)}
                             />
                         </div>
                         <div>
-                            <button className="edit-button" onClick={handleSave}>
-                                Save
+                            <button className="edit-button" onClick={handleSave} disabled={loading}>
+                                {loading ? 'Saving...' : 'Save'}
                             </button>
-                            <button
-                                className="edit-button"
-                                onClick={handleCancel}
-                                style={{ marginLeft: '10px' }}
-                            >
+                            <button className="edit-button" onClick={handleCancel} style={{ marginLeft: '10px' }}>
                                 Cancel
                             </button>
                         </div>
@@ -85,7 +87,7 @@ export default function User() {
                     <>
                         <h1>
                             Welcome back<br />
-                            {firstName} {lastName}!
+                            {user?.firstName} {user?.lastName}!
                         </h1>
                         <button className="edit-button" onClick={handleEditClick}>
                             Edit Name

@@ -74,6 +74,24 @@ export default function User() {
                                 onChange={(e) => setEditUserName(e.target.value)}
                             />
                         </div>
+                        <div className="input-wrapper">
+                            <label htmlFor="firstName">First name</label>
+                            <input
+                                type="text"
+                                id="firstName"
+                                value={user?.firstName ?? ''}
+                                disabled
+                            />
+                        </div>
+                        <div className="input-wrapper">
+                            <label htmlFor="lastName">Last name</label>
+                            <input
+                                type="text"
+                                id="lastName"
+                                value={user?.lastName ?? ''}
+                                disabled
+                            />
+                        </div>
                         <div>
                             <button className="edit-button" onClick={handleSave} disabled={loading}>
                                 {loading ? 'Saving...' : 'Save'}
@@ -104,7 +122,7 @@ export default function User() {
                         <p className="account-amount-description">{account.description}</p>
                     </div>
                     <div className="account-content-wrapper cta">
-                        <button className="transaction-button">View transactions</button>
+                        <button className="transaction-button"><i className="fa-solid fa-angle-right"></i></button>
                     </div>
                 </section>
             ))}

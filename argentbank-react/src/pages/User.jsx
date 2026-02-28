@@ -212,7 +212,7 @@ export default function User() {
                 const transactions = transactionsByAccount[account.id] || [];
 
                 return (
-                    <section key={account.id} className="account">
+                    <section key={account.id} className={`account ${isOpen ? 'account--open' : ''}`}>
                         <div className="account-header">
                             <div className="account-content-wrapper">
                                 <h3 className="account-title">{account.title}</h3>
@@ -236,51 +236,53 @@ export default function User() {
                         </div>
 
                         {isOpen && (
-                            <div className="transactions-list">
-                                <div className="transactions-header">
-                                    <span className="transactions-header-date">Date</span>
-                                    <span className="transactions-header-description">Description</span>
-                                    <span className="transactions-header-amount">Amount</span>
-                                    <span className="transactions-header-balance">Balance</span>
-                                </div>
-                                {transactions.map((tx) => {
-                                    const isTxOpen = openTransactionId === tx.id;
+                            <div className="transactions-panel">
+                                <div className="transactions-list">
+                                    <div className="transactions-header">
+                                        <span className="transactions-header-date">Date</span>
+                                        <span className="transactions-header-description">Description</span>
+                                        <span className="transactions-header-amount">Amount</span>
+                                        <span className="transactions-header-balance">Balance</span>
+                                    </div>
+                                    {transactions.map((tx) => {
+                                        const isTxOpen = openTransactionId === tx.id;
 
-                                    return (
-                                        <div key={tx.id} className="transaction-block">
-                                            <div
-                                                className={`transaction-row ${isTxOpen ? 'transaction-row-open' : ''
-                                                    }`}
-                                            >
-                                                <span className="transaction-cell transaction-cell-date">
-                                                    {tx.date}
-                                                </span>
-                                                <span className="transaction-cell transaction-cell-description">
-                                                    {tx.description}
-                                                </span>
-                                                <span className="transaction-cell transaction-cell-amount">
-                                                    {tx.amount}
-                                                </span>
-                                                <span className="transaction-cell transaction-cell-balance">
-                                                    {tx.balance}
-                                                </span>
-                                                <span className="transaction-cell transaction-cell-toggle">
-                                                    <button
-                                                        type="button"
-                                                        className="transaction-toggle-button"
-                                                        onClick={() => handleToggleTransaction(tx.id)}
-                                                        aria-expanded={isTxOpen}
-                                                    >
-                                                        <i
-                                                            className={`fa-solid ${isTxOpen ? 'fa-angle-up' : 'fa-angle-down'
-                                                                }`}
-                                                        ></i>
-                                                    </button>
-                                                </span>
-                                            </div>
+                                        return (
+                                            <div key={tx.id} className="transaction-block">
+                                                <div
+                                                    className={`transaction-row ${isTxOpen ? 'transaction-row-open' : ''
+                                                        }`}
+                                                >
+                                                    <span className="transaction-cell transaction-cell-date">
+                                                        {tx.date}
+                                                    </span>
+                                                    <span className="transaction-cell transaction-cell-description">
+                                                        {tx.description}
+                                                    </span>
+                                                    <span className="transaction-cell transaction-cell-amount">
+                                                        {tx.amount}
+                                                    </span>
+                                                    <span className="transaction-cell transaction-cell-balance">
+                                                        {tx.balance}
+                                                    </span>
+                                                    <span className="transaction-cell transaction-cell-toggle">
+                                                        <button
+                                                            type="button"
+                                                            className="transaction-toggle-button"
+                                                            onClick={() => handleToggleTransaction(tx.id)}
+                                                            aria-expanded={isTxOpen}
+                                                        >
+                                                            <i
+                                                                className={`fa-solid ${isTxOpen ? 'fa-angle-up' : 'fa-angle-down'
+                                                                    }`}
+                                                            ></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
 
-                                            {isTxOpen && (
-                                                <div className="transaction-detail">
+                                                {isTxOpen && (
+                                                    <div className="transaction-detail-wrapper">
+                                                        <div className="transaction-detail">
                                                     <div className="transaction-detail-row">
                                                         <span className="transaction-detail-label">
                                                             Transaction type
@@ -354,10 +356,12 @@ export default function User() {
                                                         </span>
                                                     </div>
                                                 </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         )}
                     </section>

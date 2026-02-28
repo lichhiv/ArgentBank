@@ -153,41 +153,45 @@ export default function User() {
             <div className="header">
                 {isEditing ? (
                     <>
-                        <h1>Edit user info</h1>
-                        <div className="input-wrapper">
-                            <label htmlFor="userName">User name</label>
-                            <input
-                                type="text"
-                                id="userName"
-                                value={editUserName}
-                                onChange={(e) => setEditUserName(e.target.value)}
-                            />
+                        <div className="edit-user-form">
+                            <h1>Edit user info</h1>
+                            <div className="input-wrapper">
+                                <label htmlFor="userName">User name</label>
+                                <input
+                                    type="text"
+                                    id="userName"
+                                    value={editUserName}
+                                    onChange={(e) => setEditUserName(e.target.value)}
+                                />
+                            </div>
+                            <div className="input-wrapper">
+                                <label htmlFor="firstName">First name</label>
+                                <input
+                                    type="text"
+                                    id="firstName"
+                                    value={user?.firstName ?? ''}
+                                    disabled
+                                />
+                            </div>
+                            <div className="input-wrapper">
+                                <label htmlFor="lastName">Last name</label>
+                                <input
+                                    type="text"
+                                    id="lastName"
+                                    value={user?.lastName ?? ''}
+                                    disabled
+                                />
+                            </div>
                         </div>
-                        <div className="input-wrapper">
-                            <label htmlFor="firstName">First name</label>
-                            <input
-                                type="text"
-                                id="firstName"
-                                value={user?.firstName ?? ''}
-                                disabled
-                            />
-                        </div>
-                        <div className="input-wrapper">
-                            <label htmlFor="lastName">Last name</label>
-                            <input
-                                type="text"
-                                id="lastName"
-                                value={user?.lastName ?? ''}
-                                disabled
-                            />
-                        </div>
-                        <div>
-                            <button className="edit-button" onClick={handleSave} disabled={loading}>
-                                {loading ? 'Saving...' : 'Save'}
-                            </button>
-                            <button className="edit-button" onClick={handleCancel} style={{ marginLeft: '10px' }}>
-                                Cancel
-                            </button>
+                        <div className="edit-buttons-wrapper">
+                            <div className="edit-buttons">
+                                <button className="edit-button" onClick={handleSave} disabled={loading}>
+                                    {loading ? 'Saving...' : 'Save'}
+                                </button>
+                                <button className="edit-button" onClick={handleCancel}>
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
                     </>
                 ) : (

@@ -339,7 +339,7 @@ export default function User() {
                                                                             e.target.value
                                                                         )
                                                                     }
-                                                                    onBlur={() => setEditingNoteId(tx.id)}
+                                                                    onBlur={() => setEditingNoteId(null)}
                                                                 />
                                                             ) : (
                                                                 <>

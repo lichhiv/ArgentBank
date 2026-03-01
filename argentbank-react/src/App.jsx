@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import './main.css';
 import Header from './components/Header';
 import HeaderConnected from './components/HeaderConnected';
 import Footer from './components/Footer';

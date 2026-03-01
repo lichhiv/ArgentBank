@@ -1,22 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
+/**
+ * Header affiché lorsque l'utilisateur n'est pas connecté.
+ * Logo + lien Sign In.
+ */
 export default function Header() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userName, setUserName] = useState('');
-    const navigate = useNavigate();
-
-    const handleLogout = () => {
-        setIsLoggedIn(false);
-        setUserName('');
-        navigate('/');
-    };
-
-    const handleLogin = (name) => {
-        setIsLoggedIn(true);
-        setUserName(name);
-    };
-
     return (
         <nav className="main-nav">
             <Link className="main-nav-logo" to="/">
@@ -28,27 +16,10 @@ export default function Header() {
                 <h1 className="sr-only">Argent Bank</h1>
             </Link>
             <div>
-                {!isLoggedIn ? (
-                    <Link className="main-nav-item" to="/sign-in">
-                        <i className="fa fa-user-circle"></i>
-                        Sign In
-                    </Link>
-                ) : (
-                    <>
-                        <Link className="main-nav-item" to="/user">
-                            <i className="fa fa-user-circle"></i>
-                            {userName}
-                        </Link>
-                        <Link
-                            className="main-nav-item"
-                            to="/"
-                            onClick={handleLogout}
-                        >
-                            <i className="fa fa-sign-out"></i>
-                            Sign Out
-                        </Link>
-                    </>
-                )}
+                <Link className="main-nav-item" to="/sign-in">
+                    <i className="fa fa-user-circle"></i>
+                    Sign In
+                </Link>
             </div>
         </nav>
     );

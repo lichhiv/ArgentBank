@@ -1,16 +1,19 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/authSlice';
 
 /**
  * Header affiché lorsque l'utilisateur est connecté.
  * Nom d'utilisateur + 3 icônes Font Awesome (profil, paramètres, déconnexion) dans cercles verts.
+ * Logo personnalisé uniquement sur la page /user.
  */
 export default function HeaderConnected() {
     const navigate = useNavigate();
+    const location = useLocation();
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
     const displayName = user?.userName ?? user?.firstName ?? 'Profile';
+    const isUserPage = location.pathname === '/user';
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -23,7 +26,7 @@ export default function HeaderConnected() {
             <Link className="main-nav-logo" to="/">
                 <img
                     className="main-nav-logo-image"
-                    src="/img/argentBankLogo.webp"
+                    src={isUserPage ? '/img/argentBankLogoConnected.png' : '/img/argentBankLogo.webp'}
                     alt="Argent Bank Logo"
                 />
                 <h1 className="sr-only">Argent Bank</h1>

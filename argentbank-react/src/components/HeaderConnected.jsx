@@ -36,10 +36,10 @@ export default function HeaderConnected() {
                     title="Profil"
                     aria-label="Profil"
                 >
-                    <i className="fa-solid fa-user" aria-hidden="true"></i>
+                    <i className="fa-regular fa-user" style={{ color: '#fff' }} aria-hidden="true"></i>
                 </Link>
                 <Link
-                    className="nav-icon-circle nav-icon-circle--filled"
+                    className="nav-icon-circle"
                     to="/user"
                     title="Paramètres"
                     aria-label="Paramètres"
@@ -47,7 +47,7 @@ export default function HeaderConnected() {
                     <i className="fa-solid fa-gear" aria-hidden="true"></i>
                 </Link>
                 <Link
-                    className="nav-icon-circle nav-icon-circle--filled"
+                    className="nav-icon-circle"
                     to="/"
                     onClick={handleLogout}
                     title="Déconnexion"

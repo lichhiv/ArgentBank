@@ -108,7 +108,21 @@ body {
 }
 
 .nav-icon-circle--filled i {
-  font-size: 0.95rem;
+  font-size: 1.2rem;
+}
+
+/* Icônes sans fond rond (Paramètres, Déconnexion) - conforme maquette */
+.nav-icon-circle:not(.nav-icon-circle--filled) {
+  background: transparent;
+  color: #00bc77;
+}
+
+.nav-icon-circle:not(.nav-icon-circle--filled):hover {
+  opacity: 0.8;
+}
+
+.nav-icon-circle:not(.nav-icon-circle--filled) i {
+  font-size: 1.35rem;
 }
 
 .hero {

@@ -101,6 +101,136 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /user/accounts:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Liste des comptes utilisateur
+      description: Retourne tous les comptes de l'utilisateur authentifié, utilisés pour afficher les cartes de comptes et regrouper les transactions par compte.
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Liste des comptes récupérée avec succès
+          schema:
+            $ref: '#/definitions/AccountsListResponse'
+        '401':
+          description: Accès non autorisé - Jeton invalide ou manquant
+        '500':
+          description: Erreur interne du serveur
+
+  /user/accounts/{accountId}/transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Lister les transactions d'un compte
+      description: Retourne toutes les transactions du compte indiqué pour un mois donné. Utilisé pour afficher les transactions du mois en cours, regroupées par compte.
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          type: string
+          description: Identifiant du compte
+        - in: query
+          name: month
+          required: false
+          type: string
+          description: Mois au format YYYY-MM. Par défaut, le mois courant si absent.
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Liste des transactions récupérée avec succès
+          schema:
+            $ref: '#/definitions/TransactionsListResponse'
+        '401':
+          description: Accès non autorisé - Jeton invalide ou manquant
+        '403':
+          description: Accès interdit - Le compte n'appartient pas à l'utilisateur
+        '404':
+          description: Compte introuvable
+        '500':
+          description: Erreur interne du serveur
+
+  /user/accounts/{accountId}/transactions/{transactionId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Obtenir le détail d'une transaction
+      description: Retourne toutes les informations d'une transaction donnée. Utilisé pour l'affichage du panneau de détail de la transaction.
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          type: string
+          description: Identifiant du compte
+        - in: path
+          name: transactionId
+          required: true
+          type: string
+          description: Identifiant de la transaction
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Détail de la transaction récupéré avec succès
+          schema:
+            $ref: '#/definitions/TransactionDetailResponse'
+        '401':
+          description: Accès non autorisé - Jeton invalide ou manquant
+        '403':
+          description: Accès interdit - Le compte ou la transaction n'appartient pas à l'utilisateur
+        '404':
+          description: Transaction introuvable
+        '500':
+          description: Erreur interne du serveur
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Mettre à jour les informations d'une transaction
+      description: Met à jour les informations éditables d'une transaction (par exemple la catégorie ou la note). Ne crée ni ne supprime la transaction elle-même.
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          type: string
+          description: Identifiant du compte
+        - in: path
+          name: transactionId
+          required: true
+          type: string
+          description: Identifiant de la transaction
+        - in: body
+          name: body
+          required: true
+          description: Champs à mettre à jour sur la transaction
+          schema:
+            $ref: '#/definitions/TransactionUpdate'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Informations de la transaction mises à jour avec succès
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Champs invalides ou erreur de validation
+        '401':
+          description: Accès non autorisé - Jeton invalide ou manquant
+        '403':
+          description: Accès interdit - Le compte ou la transaction n'appartient pas à l'utilisateur
+        '404':
+          description: Transaction introuvable
+        '500':
+          description: Erreur interne du serveur
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -156,3 +286,105 @@ definitions:
     properties:
       userName:
         type: string
+
+  Account:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier of the account
+      accountName:
+        type: string
+        description: Display name of the account (e.g. Checking, Savings)
+      accountNumber:
+        type: string
+        description: Masked or full account number
+      balance:
+        type: number
+        format: double
+        description: Current balance
+      currency:
+        type: string
+        description: Currency code (e.g. USD, EUR)
+
+  Transaction:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier of the transaction
+      date:
+        type: string
+        description: Transaction date
+      description:
+        type: string
+        description: Transaction description or label
+      amount:
+        type: number
+        format: double
+        description: Transaction amount (negative for debit, positive for credit)
+      balance:
+        type: number
+        format: double
+        description: Balance after transaction (optional)
+      transactionType:
+        type: string
+        description: Factual transaction type (e.g. Electronic)
+      type:
+        type: string
+        enum:
+          - debit
+          - credit
+        description: Debit or credit
+      category:
+        type: string
+        description: Optional category (editable by user)
+      note:
+        type: string
+        description: Optional note (editable by user)
+
+  TransactionUpdate:
+    type: object
+    description: Editable information on a transaction. Only provided fields are updated.
+    properties:
+      category:
+        type: string
+        description: Set or update the transaction category
+      note:
+        type: string
+        description: Set or update the transaction note (empty string to clear)
+
+  AccountsListResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: array
+        items:
+          $ref: '#/definitions/Account'
+
+  TransactionsListResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: array
+        items:
+          $ref: '#/definitions/Transaction'
+
+  TransactionDetailResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        $ref: '#/definitions/Transaction'
+
